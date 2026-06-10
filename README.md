@@ -16,12 +16,15 @@ moves that reviewer role into an independent critic so the iteration runs on its
 
 ## Inspiration
 
-The idea behind `loop` — that engineers increasingly **write loops that drive coding
-agents** instead of prompting them turn by turn — comes from a wave of mid-2026
-discussion, notably between **Boris Cherny** (a creator of Claude Code at Anthropic) and
-**Peter Steinberger**, captured in Matt Van Horn's article
-[*WTF Is a Loop?*](https://x.com/mvanhorn/article/2063865685558903149). `loop` is an
-open-source take on that idea for Claude Code.
+> "I don't prompt Claude anymore. I have loops that are running. They're the ones that
+> are prompting Claude."
+>
+> — **Boris Cherny**, a creator of Claude Code at Anthropic
+> (as quoted in Matt Van Horn's [*WTF Is a Loop?*](https://x.com/mvanhorn/article/2063865685558903149))
+
+That shift — engineers **writing loops that drive coding agents** instead of prompting
+them turn by turn — is what `loop` is built around. The same article frames it as Boris
+Cherny vs. **Peter Steinberger**; `loop` is an open-source take on the idea for Claude Code.
 
 > Independent project — not affiliated with, nor endorsed by, those individuals or
 > Anthropic.
