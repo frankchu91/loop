@@ -21,9 +21,12 @@ Every round you have to stop, read, judge, and re-prompt. `loop` removes that ta
 
 - **You specify the destination, not each step.** A short spec file captures the goal,
   the objective pass/fail checks, and the quality bar.
-- **Claude critiques itself — adversarially.** Each round, an independent `loop-critic`
-  subagent (fresh context, told to find what's wrong) reviews the work. Independence is
-  the point: a model grading its own homework declares victory too early.
+- **Done means it actually works.** Each round an independent `loop-critic` subagent
+  (fresh context, told to find what's wrong) **runs the product** — installs, builds,
+  launches, exercises the core flow — and judges it across four dimensions: works,
+  complete (no stubs/mocks/TODOs), code quality, and UX. "Code exists" is not "done".
+- **The bar self-tightens.** The critic also surfaces missing requirements, which are
+  appended (never removed) to your spec, so the loop can't exit while features are missing.
 - **It stops itself, safely.** The loop ends when checks pass *and* the critic is clean —
   or when a hard guardrail trips. Termination is guaranteed.
 
@@ -38,8 +41,10 @@ Every round you have to stop, read, judge, and re-prompt. `loop` removes that ta
 ┌─────────────────────────────────────────────┐
 │  ROUND (one Claude turn)                      │
 │   1. build / improve toward the Goal          │
-│   2. dispatch loop-critic subagent (review)   │
-│   3. record critic verdict into state         │
+│   2. loop-critic RUNS the product + reviews   │
+│      (install, build, launch, exercise flow)  │
+│   3. append any newly discovered criteria     │
+│   4. record critic verdict into state         │
 └─────────────────────────────────────────────┘
    │  turn ends
    ▼
@@ -55,6 +60,21 @@ Stop hook → loop-gate
 
 The loop runs **inside your current Claude Code session**. A `Stop` hook intercepts the
 end of each turn, so Claude keeps going on its own instead of handing control back to you.
+
+### Evidence-based "done"
+
+The critic does not judge from reading code. It actually installs dependencies from
+clean, builds, starts the app/service, and exercises the core flow — and only returns
+`clean` with evidence the product genuinely works across all four dimensions. If it
+can't run the thing, that's a failure, not a pass.
+
+### Self-evolving quality bar
+
+The critic also returns **newly discovered acceptance criteria** — requirements that
+should be in the bar but were missing (e.g. a feature you didn't spell out). Each round
+these are appended (never removed) to a `## Discovered criteria (auto …)` section inside
+your `loops/<name>.loop.md`, so the bar tightens as the loop learns and persists across
+runs. The gate enforces this ratchet: if the criteria count ever drops, the loop halts.
 
 ---
 
