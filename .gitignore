@@ -1,2 +1,5 @@
 node_modules/
 .loop/
+
+# Internal design specs/plans — not part of the published plugin
+docs/superpowers/

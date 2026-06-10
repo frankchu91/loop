@@ -80,14 +80,21 @@ runs. The gate enforces this ratchet: if the criteria count ever drops, the loop
 
 ## Install
 
-`loop` is installed as a local Claude Code plugin via a local marketplace.
+`loop` is a local Claude Code plugin. Clone it, then add it as a local marketplace.
 
-```text
-/plugin marketplace add /Users/chuhaobing/repo/loop
-/plugin install loop@loop-dev
+```bash
+git clone https://github.com/<owner>/loop.git
 ```
 
-- `loop-dev` is the marketplace name; `loop` is the plugin name.
+Then, in Claude Code (replace `/path/to/loop` with wherever you cloned it):
+
+```text
+/plugin marketplace add /path/to/loop
+/plugin install loop@loop
+```
+
+- `loop@loop` is `<plugin>@<marketplace>` — both are named `loop` (the marketplace name
+  comes from `.claude-plugin/marketplace.json`).
 - Pick **user scope** to use it everywhere, or **local scope** for one repo only.
 
 Verify it loaded:
@@ -108,10 +115,10 @@ After editing plugin files during development, reload without restarting:
 If a change doesn't take or you see a load error, do a clean reinstall:
 
 ```text
-/plugin uninstall loop@loop-dev
-/plugin marketplace remove loop-dev
-/plugin marketplace add /Users/chuhaobing/repo/loop
-/plugin install loop@loop-dev
+/plugin uninstall loop@loop
+/plugin marketplace remove loop
+/plugin marketplace add /path/to/loop
+/plugin install loop@loop
 ```
 
 > **Note on the manifest:** `.claude-plugin/plugin.json` intentionally declares **no**
@@ -253,6 +260,26 @@ npm test
 
 ---
 
+## Contributing
+
+Contributions are welcome. A few conventions keep this codebase predictable:
+
+- **Zero runtime dependencies.** The gate runs inside a Stop hook on every turn; it must
+  stay fast and dependency-free. Tests use the built-in `node --test` runner.
+- **The gate logic is pure and tested.** `lib/gate.mjs` (`decide`) does no I/O — all the
+  decision logic lives there with thorough unit tests. `bin/loop-gate.mjs` is the thin
+  I/O wrapper. Add behavior to the pure layer with a test first.
+- **Safety invariants belong in the engine, not the prompts.** Termination (the
+  `max_iterations` cap on gate-owned evaluations), the criteria ratchet, and fail-safe
+  exits are enforced in code so they don't depend on the model behaving.
+- **Don't add component paths to `.claude-plugin/plugin.json`** — see the manifest note
+  under [Install](#install).
+
+To propose a change: open an issue describing the behavior, then a PR with tests. Run
+`npm test` before pushing.
+
+---
+
 ## License
 
-MIT
+[MIT](LICENSE) © chuhaobing
