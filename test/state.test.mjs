@@ -42,3 +42,8 @@ test("loadState returns null on corrupt json (fail safe)", async () => {
   assert.equal(loadState(dir), null);
   await rm(dir, { recursive: true, force: true });
 });
+
+test("initState includes criteriaCount 0", () => {
+  const s = initState("x", "loops/x.loop.md");
+  assert.equal(s.criteriaCount, 0);
+});
