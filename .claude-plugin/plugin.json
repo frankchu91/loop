@@ -1,0 +1,9 @@
+{
+  "name": "loop",
+  "version": "1.0.0",
+  "description": "Author a loop spec, then Claude builds and self-critiques until the feature is delivered — no per-round human prompting.",
+  "author": { "name": "chuhaobing" },
+  "skills": "./skills/",
+  "agents": ["./agents/"],
+  "hooks": "./hooks/hooks.json"
+}

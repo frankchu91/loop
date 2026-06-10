@@ -1,0 +1,10 @@
+{
+  "name": "loop-plugin",
+  "version": "1.0.0",
+  "description": "Autonomous build-critique loop for Claude Code",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/"
+  }
+}
