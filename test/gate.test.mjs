@@ -114,3 +114,17 @@ test("tolerates state without a history field", () => {
   assert.equal(r.action, "done");
   assert.ok(Array.isArray(r.nextState.history));
 });
+
+test("never reports done at iteration 0 (no completed round)", () => {
+  const st = freshState({ iteration: 0, lastCritic: { iteration: 0, verdict: "clean", findings: [] } });
+  const r = decide({ state: st, spec, checkResults: pass });
+  assert.equal(r.action, "block");
+  assert.match(r.reason, /round 1|no iterations/i);
+});
+
+test("a loop stuck at iteration 0 is still bounded by the evaluations cap", () => {
+  const st = freshState({ iteration: 0, evaluations: 4, lastCritic: null });
+  const r = decide({ state: st, spec, checkResults: pass });
+  assert.equal(r.action, "cap");
+  assert.equal(r.nextState.active, false);
+});
