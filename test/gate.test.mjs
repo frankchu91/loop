@@ -48,8 +48,8 @@ test("block (not done) when critic verdict is stale for this round", () => {
   assert.match(r.reason, /critic/i);
 });
 
-test("cap when iteration reaches max_iterations", () => {
-  const st = freshState({ iteration: 5, lastCritic: { iteration: 5, verdict: "issues", findings: ["x"] } });
+test("cap when gate evaluations reach max_iterations (hard floor)", () => {
+  const st = freshState({ evaluations: 4, iteration: 5, lastCritic: { iteration: 5, verdict: "issues", findings: ["x"] } });
   const r = decide({ state: st, spec, checkResults: fail });
   assert.equal(r.action, "cap");
   assert.equal(r.nextState.active, false);
@@ -85,4 +85,24 @@ test("halt when a check command errored (misconfig)", () => {
   assert.equal(r.action, "halt");
   assert.equal(r.nextState.active, false);
   assert.match(r.reason, /errored|misconfig/i);
+});
+
+test("cap fires even when the critic is stale (hard floor cannot be bypassed)", () => {
+  const st = freshState({ evaluations: 4, iteration: 9, lastCritic: { iteration: 1, verdict: "clean", findings: [] } });
+  const r = decide({ state: st, spec, checkResults: fail });
+  assert.equal(r.action, "cap");
+  assert.equal(r.nextState.active, false);
+});
+
+test("done wins over cap at the boundary (delivery beats hard floor)", () => {
+  const st = freshState({ evaluations: 4, iteration: 5, lastCritic: { iteration: 5, verdict: "clean", findings: [] } });
+  const r = decide({ state: st, spec, checkResults: pass });
+  assert.equal(r.action, "done");
+});
+
+test("block reason is informative when critic issues has no findings field", () => {
+  const st = freshState({ lastCritic: { iteration: 1, verdict: "issues" } }); // no findings key
+  const r = decide({ state: st, spec, checkResults: pass });
+  assert.equal(r.action, "block");
+  assert.match(r.reason, /re-run the loop-critic|no specific findings/i);
 });
