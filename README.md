@@ -25,7 +25,7 @@ max_iterations: 15        # hard cap — guarantees the loop stops
 max_spend_usd: 5          # advisory only in v1 (not enforced)
 stall_after: 3            # same failures N rounds in a row -> stop
 critic: subagent
-on_cap: stop_and_report   # or ask_human
+on_cap: stop_and_report   # ask_human is accepted but treated as stop_and_report in v1
 checks:
   - run: npm test
   - run: npm run build

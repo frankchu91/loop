@@ -18,7 +18,8 @@ The user wants to author a new loop spec. The argument (if any) is the loop name
      real commands for THIS repo — look at package.json / Makefile if unsure.
    - **Quality bar**: subjective acceptance criteria the critic will review against.
    - **Guardrails**: max_iterations (hard cap), stall_after, optional max_spend_usd
-     (advisory in v1), on_cap (stop_and_report | ask_human).
+     (advisory in v1), on_cap (`stop_and_report`; `ask_human` is accepted but treated
+     as `stop_and_report` in v1).
 3. Read `${CLAUDE_PLUGIN_ROOT}/templates/loop.template.md` as the starting shape,
    fill it in with the answers, and write it to `loops/<name>.loop.md` in the repo
    (create the `loops/` directory if needed).
