@@ -1,9 +1,8 @@
-# Loopsmith
+# Loop
 
 **Write loops, not prompts.**
 
-Loopsmith is a Claude Code plugin (installed as `loop`, with commands `/loop:new` and
-`/loop:run`) that turns one-shot prompting into an autonomous
+`loop` is a Claude Code plugin that turns one-shot prompting into an autonomous
 build–critique loop. You write down *what you want* and *when it's done*; Claude then
 builds it, reviews its own work with an independent critic, and keeps iterating —
 **without you re-prompting after every round** — until the work actually meets the bar
@@ -101,7 +100,7 @@ runs. The gate enforces this ratchet: if the criteria count ever drops, the loop
 `loop` is a local Claude Code plugin. Clone it, then add it as a local marketplace.
 
 ```bash
-git clone https://github.com/frankchu91/Loopsmith.git
+git clone https://github.com/frankchu91/Loop.git
 ```
 
 Then, in Claude Code (replace `/path/to/loop` with wherever you cloned it):
