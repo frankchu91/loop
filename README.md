@@ -100,7 +100,7 @@ runs. The gate enforces this ratchet: if the criteria count ever drops, the loop
 `loop` is a local Claude Code plugin. Clone it, then add it as a local marketplace.
 
 ```bash
-git clone https://github.com/<owner>/loop.git
+git clone https://github.com/frankchu91/loop.git
 ```
 
 Then, in Claude Code (replace `/path/to/loop` with wherever you cloned it):
