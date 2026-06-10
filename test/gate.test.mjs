@@ -128,3 +128,26 @@ test("a loop stuck at iteration 0 is still bounded by the evaluations cap", () =
   assert.equal(r.action, "cap");
   assert.equal(r.nextState.active, false);
 });
+
+test("halt when criteria count drops below recorded (ratchet violation)", () => {
+  const st = freshState({ criteriaCount: 5 });
+  const r = decide({ state: st, spec: { ...spec, criteriaCount: 3 }, checkResults: pass });
+  assert.equal(r.action, "halt");
+  assert.equal(r.nextState.active, false);
+  assert.match(r.reason, /ratchet|criteria/i);
+});
+
+test("criteria count increase is allowed and carried into nextState", () => {
+  const st = freshState({ criteriaCount: 3 });
+  const r = decide({ state: st, spec: { ...spec, criteriaCount: 5 }, checkResults: pass });
+  assert.notEqual(r.action, "halt");
+  assert.equal(r.nextState.criteriaCount, 5);
+});
+
+test("missing state.criteriaCount does not trigger a ratchet halt", () => {
+  const st = freshState();
+  delete st.criteriaCount;
+  const r = decide({ state: st, spec: { ...spec, criteriaCount: 2 }, checkResults: pass });
+  assert.notEqual(r.action, "halt");
+  assert.equal(r.nextState.criteriaCount, 2);
+});
