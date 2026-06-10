@@ -36,8 +36,9 @@ role that the human used to play.
    it yourself.
 
 ### The loop (each round — do ALL of this before ending your turn)
-Immediately continue into round 1 in the same turn as setup; do not end your turn on
-setup alone.
+You MUST continue into round 1 in the same turn as setup — do not end your turn after
+writing `state.json`. (If the hook ever blocks you saying "no iterations have run yet,"
+your setup turn ended early: just proceed with round 1 below.)
 
 1. Read `.loop/state.json`. Set `iteration = iteration + 1` and write it back.
 2. Do the work: build or improve the feature toward the Goal. On round 1, start
@@ -51,9 +52,11 @@ setup alone.
    `"lastCritic": { "iteration": <current iteration>, "verdict": <verdict>, "findings": <findings> }`
    `lastCritic.iteration` MUST equal the current `iteration`, or the hook will send
    you straight back to run the critic for this round.
-5. End your turn. The hook now evaluates. If it returns a `block` message, start the
-   next round at step 1, addressing exactly what it listed. If your turn simply ends
-   with no `block` message, the loop is finished.
+5. End your turn. The hook now evaluates. If it returns a `block` response, start the
+   next round at step 1, addressing exactly what it listed. If your turn ends without a
+   `block` response, the loop is finished — either cleanly (all checks pass, critic
+   clean; you'll see no message) or because a guardrail tripped (you'll receive a
+   `systemMessage` saying which). Either way, do not start another round.
 
 ### Ending
 The loop ends when:
