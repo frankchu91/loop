@@ -14,6 +14,20 @@ moves that reviewer role into an independent critic so the iteration runs on its
 
 ---
 
+## Inspiration
+
+The idea behind `loop` — that engineers increasingly **write loops that drive coding
+agents** instead of prompting them turn by turn — comes from a wave of mid-2026
+discussion, notably between **Boris Cherny** (a creator of Claude Code at Anthropic) and
+**Peter Steinberger**, captured in Matt Van Horn's article
+[*WTF Is a Loop?*](https://x.com/mvanhorn/article/2063865685558903149). `loop` is an
+open-source take on that idea for Claude Code.
+
+> Independent project — not affiliated with, nor endorsed by, those individuals or
+> Anthropic.
+
+---
+
 ## Why
 
 The expensive part of agentic coding isn't writing code anymore — it's the back-and-forth.
@@ -283,3 +297,8 @@ To propose a change: open an issue describing the behavior, then a PR with tests
 ## License
 
 [MIT](LICENSE) © chuhaobing
+
+---
+
+⭐ If `loop` saves you from prompt-by-prompt babysitting, **star the repo** — it helps
+other engineers find it.
