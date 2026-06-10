@@ -106,3 +106,11 @@ test("block reason is informative when critic issues has no findings field", () 
   assert.equal(r.action, "block");
   assert.match(r.reason, /re-run the loop-critic|no specific findings/i);
 });
+
+test("tolerates state without a history field", () => {
+  const st = freshState();
+  delete st.history;
+  const r = decide({ state: st, spec, checkResults: pass });
+  assert.equal(r.action, "done");
+  assert.ok(Array.isArray(r.nextState.history));
+});
