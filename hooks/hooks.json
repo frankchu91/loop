@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/bin/loop-gate.mjs\"",
+            "timeout": 120,
+            "statusMessage": "loop: checking exit conditions"
+          }
+        ]
+      }
+    ]
+  }
+}
