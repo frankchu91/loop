@@ -71,3 +71,19 @@ test("handles CRLF line endings", () => {
   assert.deepEqual(s.checks, [{ run: "npm test" }]);
   assert.match(s.goal, /Do the thing/);
 });
+
+test("counts acceptance criteria checkboxes", () => {
+  const s = parseSpec(SAMPLE);
+  assert.equal(s.criteriaCount, 2);
+});
+
+test("criteriaCount is 0 when the quality bar has no checkboxes", () => {
+  const s = parseSpec(`---\nchecks:\n  - run: x\n---\n# Goal\ng\n# Quality bar\nprose only, no boxes\n`);
+  assert.equal(s.criteriaCount, 0);
+});
+
+test("criteriaCount includes checkboxes in an H2 auto subsection", () => {
+  const text = `---\nchecks:\n  - run: x\n---\n# Goal\ng\n# Quality bar\n- [ ] human one\n\n## Discovered criteria (auto)\n- [ ] auto one\n- [x] auto two\n`;
+  const s = parseSpec(text);
+  assert.equal(s.criteriaCount, 3);
+});
