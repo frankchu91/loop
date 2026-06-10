@@ -105,6 +105,21 @@ After editing plugin files during development, reload without restarting:
 /reload-plugins
 ```
 
+If a change doesn't take or you see a load error, do a clean reinstall:
+
+```text
+/plugin uninstall loop@loop-dev
+/plugin marketplace remove loop-dev
+/plugin marketplace add /Users/chuhaobing/repo/loop
+/plugin install loop@loop-dev
+```
+
+> **Note on the manifest:** `.claude-plugin/plugin.json` intentionally declares **no**
+> component paths. Claude Code auto-discovers `skills/`, `agents/`, and `hooks/hooks.json`
+> by convention. Do **not** add `skills` / `agents` / `hooks` keys back to the manifest —
+> doing so either fails validation (`agents` only accepts file paths, not a directory) or
+> double-loads `hooks/hooks.json` ("Duplicate hooks file detected").
+
 ---
 
 ## Usage
@@ -212,6 +227,8 @@ figure. Use `max_iterations` to bound cost.
 | It keeps looping and never says done | The critic still finds issues or a check keeps failing. Watch `.loop/state.json`; tighten the goal or relax an over-strict quality bar. Hits `max_iterations` eventually regardless. |
 | Hook seems to fire in normal (non-loop) sessions | Expected — with no active loop the gate returns instantly and does nothing. Disable the plugin in `/plugin` if you want it fully off. |
 | `/loop:run` says no spec found | Run `/loop:new <name>` first, or pass the right name. |
+| Install fails: `Validation errors: agents: Invalid input` | The manifest must not point `agents`/`skills` at a directory — remove those keys so they auto-discover. See the manifest note in **Install**. |
+| Plugin error: `Duplicate hooks file detected … hooks/hooks.json` | The manifest has a `hooks` key while `hooks/hooks.json` is also auto-loaded. Remove the `hooks` key, then clean-reinstall (see **Install**). |
 
 ---
 
