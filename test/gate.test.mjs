@@ -151,3 +151,19 @@ test("missing state.criteriaCount does not trigger a ratchet halt", () => {
   assert.notEqual(r.action, "halt");
   assert.equal(r.nextState.criteriaCount, 2);
 });
+
+test("a round that grew the bar mid-loop cannot declare done (engine-enforced)", () => {
+  const st = freshState({ iteration: 2, evaluations: 1, criteriaCount: 3,
+    lastCritic: { iteration: 2, verdict: "clean", findings: [] } });
+  const r = decide({ state: st, spec: { ...spec, criteriaCount: 5 }, checkResults: pass });
+  assert.equal(r.action, "block");
+  assert.match(r.reason, /new acceptance criteria|grows the bar/i);
+  assert.equal(r.nextState.criteriaCount, 5);
+});
+
+test("first fire with a larger human bar than the seeded count can still declare done", () => {
+  const st = freshState({ iteration: 1, evaluations: 0, criteriaCount: 0,
+    lastCritic: { iteration: 1, verdict: "clean", findings: [] } });
+  const r = decide({ state: st, spec: { ...spec, criteriaCount: 5 }, checkResults: pass });
+  assert.equal(r.action, "done");
+});
