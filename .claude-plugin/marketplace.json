@@ -1,0 +1,13 @@
+{
+  "name": "loop-dev",
+  "owner": {
+    "name": "chuhaobing"
+  },
+  "plugins": [
+    {
+      "name": "loop",
+      "source": ".",
+      "description": "Author a loop spec, then Claude builds and self-critiques until the feature is delivered — no per-round human prompting."
+    }
+  ]
+}
