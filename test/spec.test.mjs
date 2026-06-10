@@ -58,3 +58,16 @@ test("applies defaults when fields omitted", () => {
 test("throws on missing frontmatter", () => {
   assert.throws(() => parseSpec("# Goal\nno frontmatter\n"), /frontmatter/i);
 });
+
+test("empty scalar value falls back to default (hard cap stays safe)", () => {
+  const s = parseSpec(`---\nmax_iterations:\nchecks:\n  - run: npm test\n---\n# Goal\nx\n`);
+  assert.equal(s.caps.maxIterations, 20);
+});
+
+test("handles CRLF line endings", () => {
+  const crlf = `---\r\nmax_iterations: 7\r\nchecks:\r\n  - run: npm test\r\n---\r\n\r\n# Goal\r\nDo the thing.\r\n`;
+  const s = parseSpec(crlf);
+  assert.equal(s.caps.maxIterations, 7);
+  assert.deepEqual(s.checks, [{ run: "npm test" }]);
+  assert.match(s.goal, /Do the thing/);
+});
